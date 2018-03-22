@@ -45,6 +45,7 @@ f = open('voc0712_trainval.txt', 'w')
 
 trainval2007f = open(data_dir + txt2007_dir + 'trainval.txt', 'r')
 for img_name in trainval2007f.readlines():
+    img_name = img_name.strip()
     print('converting %s in voc2007 trainval' % img_name)
     f.write(jpg2007_dir + img_name + ' ')
     xml_name = img_name + '.xml'
@@ -64,6 +65,7 @@ for img_name in trainval2007f.readlines():
     
 trainval2012f = open(data_dir + txt2012_dir + 'trainval.txt', 'r')
 for img_name in trainval2012f.readlines():
+    img_name = img_name.strip()
     print('converting %s in voc2012 trainval' % img_name)
     f.write(jpg2012_dir + img_name + ' ')
     xml_name = img_name + '.xml'
@@ -90,6 +92,7 @@ f = open('voc2007_test.txt', 'w')
 
 test2007f = open(data_dir + txt2007_dir + 'test.txt', 'r')
 for img_name in test2007f.readlines():
+    img_name = img_name.strip()
     print('converting %s in voc2007 test' % img_name)
     f.write(jpg2007_dir + img_name + ' ')
     xml_name = img_name + '.xml'
