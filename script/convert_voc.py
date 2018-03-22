@@ -27,7 +27,7 @@ VOC_LABELS = (
     'tvmonitor',
 )
 
-data_dir = './data/VOCdevkit'
+data_dir = './data/VOCdevkit/'
 voc2007_dir = 'VOC2007/'
 voc2012_dir = 'VOC2012/'
 
@@ -46,8 +46,8 @@ f = open('voc0712_trainval.txt', 'w')
 trainval2007f = open(data_dir + txt2007_dir + 'trainval.txt', 'r')
 for img_name in trainval2007f.readlines():
     print('converting %s in voc2007 trainval' % img_name)
-    f.write(jpg2007_dir+img_name+' ')
-    xml_name = img_name[:-4]+'.xml'
+    f.write(jpg2007_dir + img_name + ' ')
+    xml_name = img_name + '.xml'
 
     tree = ET.parse(os.path.join(data_dir, xml2007_dir, xml_name))
     annos = []
@@ -65,8 +65,8 @@ for img_name in trainval2007f.readlines():
 trainval2012f = open(data_dir + txt2012_dir + 'trainval.txt', 'r')
 for img_name in trainval2012f.readlines():
     print('converting %s in voc2012 trainval' % img_name)
-    f.write(jpg2012_dir+img_name+' ')
-    xml_name = img_name[:-4]+'.xml'
+    f.write(jpg2012_dir + img_name + ' ')
+    xml_name = img_name + '.xml'
 
     tree = ET.parse(os.path.join(data_dir, xml2012_dir, xml_name))
     annos = []
@@ -91,8 +91,8 @@ f = open('voc2007_test.txt', 'w')
 test2007f = open(data_dir + txt2007_dir + 'test.txt', 'r')
 for img_name in test2007f.readlines():
     print('converting %s in voc2007 test' % img_name)
-    f.write(jpg2007_dir+img_name+' ')
-    xml_name = img_name[:-4]+'.xml'
+    f.write(jpg2007_dir + img_name + ' ')
+    xml_name = img_name + '.xml'
 
     tree = ET.parse(os.path.join(data_dir, xml2007_dir, xml_name))
     annos = []
