@@ -226,7 +226,7 @@ def resnet_base(depth, width=1, pretrained=False, **kwargs):
     layers_dict = {18: [2, 2, 2, 2], 34: [3, 4, 6, 3], 50: [3, 4, 6, 3], 
                    101: [3, 4, 23, 3], 152: [3, 8, 36, 3]}
     block_dict = {18: BasicBlock, 34: BasicBlock, 50: Bottleneck, 101: Bottleneck, 152: Bottleneck}
-    model = ResNet(block_dict[depth], layers_dict[depth], width, **kwargs)
+    model = ResNetBase(block_dict[depth], layers_dict[depth], width, **kwargs)
     if ((width == 1) and pretrained):
         model.load_state_dict(model_zoo.load_url(model_urls[name_dict[depth]]))
     return model
