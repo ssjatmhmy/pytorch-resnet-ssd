@@ -32,6 +32,43 @@ def conv3x3(in_planes, out_planes, stride=1, dilation=1):
                      padding=1, bias=False)
 
 
+class ConvBnReluLayer(nn.Module):
+    
+    def __init__(self, inplanes, planes, kernel_size, padding, stride, bias=False):
+        super(ConvBnReluLayer, self).__init__()
+        self.conv = nn.Conv2d(inplanes, planes, kernel_size=kernel_size, padding=padding, 
+                               stride=stride, bias=bias)
+        self.bn = nn.BatchNorm2d(planes)
+        self.relu = nn.ReLU(inplace=True)
+        
+    def forward(self, x):
+        out = self.conv(x)
+        out = self.bn(out)
+        out = self.relu(out)
+        return out
+
+class ExtraLayers(nn.Module):
+    
+    def __init__(self, inplanes):
+        super(ExtraLayers, self).__init__()
+        self.convbnrelu1_1 = ConvBnReluLayer(inplanes, 256, kernel_size=1, padding=0, stride=1)
+        self.convbnrelu1_2 = ConvBnReluLayer(256, 512, kernel_size=3, padding=1, stride=2)
+        self.convbnrelu2_1 = ConvBnReluLayer(512, 256, kernel_size=1, padding=0, stride=1)
+        self.convbnrelu2_2 = ConvBnReluLayer(256, 512, kernel_size=3, padding=1, stride=2) 
+        self.convbnrelu3_1 = ConvBnReluLayer(512, 256, kernel_size=1, padding=0, stride=1)
+        self.convbnrelu3_2 = ConvBnReluLayer(256, 512, kernel_size=3, padding=1, stride=2)
+        self.avgpool = nn.AvgPool2d(3, stride=1)
+        
+    def forward(self, x):
+        out1_1 = self.convbnrelu1_1(x)
+        out1_2 = self.convbnrelu1_2(out1_1)
+        out2_1 = self.convbnrelu2_1(out1_2)
+        out2_2 = self.convbnrelu2_2(out2_1)
+        out3_1 = self.convbnrelu3_1(out2_2)
+        out3_2 = self.convbnrelu3_2(out3_1)
+        out = self.avgpool(out)
+        return out1_2, out2_2, out3_2, out
+    
 class BasicBlock(nn.Module):
     expansion = 1
 
@@ -122,7 +159,9 @@ class ResNetBase(nn.Module):
         # remove the final avgpool and fc layers
         # self.avgpool = nn.AvgPool2d(7, stride=1)
         # self.fc = nn.Linear(widths[3] * block.expansion, num_classes)
-
+        # add extra layers
+        self.extralayer = ExtraLayers(self.inplanes)
+        
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 n = m.kernel_size[0] * m.kernel_size[1] * m.out_channels
@@ -147,7 +186,7 @@ class ResNetBase(nn.Module):
             layers.append(block(self.inplanes, planes))
 
         return nn.Sequential(*layers)
-
+    
     def forward(self, x):
         x = self.conv1(x)
         x = self.bn1(x)
@@ -156,14 +195,17 @@ class ResNetBase(nn.Module):
 
         x = self.layer1(x)
         x = self.layer2(x)
+        out38x38 = x
         x = self.layer3(x)
         x = self.layer4(x)
+        out19x19 = x
 
+        out10x10, out5x5, out3x3, out1x1 = self.extralayer(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
         # x = self.fc(x)
 
-        return x
+        return out38x38, out19x19, out10x10, out5x5, out3x3, out1x1
 
            
 def resnet_base(depth, width=1, pretrained=False, **kwargs):
