@@ -26,12 +26,6 @@ model_urls = {
 }
 
 
-def conv3x3(in_planes, out_planes, stride=1, dilation=1):
-    """3x3 convolution with padding"""
-    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride, dilation=dilation,
-                     padding=1, bias=False)
-
-
 class ConvBnReluLayer(nn.Module):
     
     def __init__(self, inplanes, planes, kernel_size, padding, stride, bias=False):
@@ -47,6 +41,7 @@ class ConvBnReluLayer(nn.Module):
         out = self.relu(out)
         return out
 
+    
 class ExtraLayers(nn.Module):
     
     def __init__(self, inplanes):
@@ -68,6 +63,13 @@ class ExtraLayers(nn.Module):
         out3_2 = self.convbnrelu3_2(out3_1)
         out = self.avgpool(out)
         return out1_2, out2_2, out3_2, out
+    
+
+def conv3x3(in_planes, out_planes, stride=1, dilation=1):
+    """3x3 convolution with padding"""
+    return nn.Conv2d(in_planes, out_planes, kernel_size=3, stride=stride, dilation=dilation,
+                     padding=1, bias=False)    
+    
     
 class BasicBlock(nn.Module):
     expansion = 1
