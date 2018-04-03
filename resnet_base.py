@@ -162,7 +162,7 @@ class ResNetBase(nn.Module):
         # self.avgpool = nn.AvgPool2d(7, stride=1)
         # self.fc = nn.Linear(widths[3] * block.expansion, num_classes)
         # add extra layers
-        self.extralayer = ExtraLayers(self.inplanes)
+        self.extra_layers = ExtraLayers(self.inplanes)
         
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
@@ -202,7 +202,7 @@ class ResNetBase(nn.Module):
         x = self.layer4(x)
         out19x19 = x
 
-        out10x10, out5x5, out3x3, out1x1 = self.extralayer(x)
+        out10x10, out5x5, out3x3, out1x1 = self.extra_layers(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
         # x = self.fc(x)
