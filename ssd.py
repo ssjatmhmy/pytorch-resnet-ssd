@@ -40,7 +40,7 @@ class MultiBoxLayer(nn.Module):
             cls_pred = cls_layer(fm)
             # [N, #anchors*4,H,W] -> [N,H,W, #anchors*4] -> [N,H*W*#anchors, 4]
             loc_pred = loc_pred.permute(0,2,3,1).contiguous().view(x.size(0),-1,4)                 
-            # [N,#anchors*#classes,H,W] -> [N,H,W,#anchors*#classes] -> [N,H*W*#anchors,#classes+1]
+            # [N,#anchors*(#classes+1),H,W] -> [N,H,W,#anchors*(#classes+1)] -> [N,H*W*#anchors,#classes+1]
             cls_pred = cls_pred.permute(0,2,3,1).contiguous().view(x.size(0),-1,(self.num_classes+1))  
             loc_preds.append(loc_pred)
             cls_preds.append(cls_pred)
