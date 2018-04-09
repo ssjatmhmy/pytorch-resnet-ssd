@@ -20,9 +20,9 @@ class MultiBoxLayer(nn.Module):
         super(MultiBoxLayer, self).__init__()
         self.num_anchors = num_anchors
         self.loc_layers = nn.ModuleList()
-        self.conf_layers = nn.ModuleList()
+        self.cls_layers = nn.ModuleList()
         for i in range(len(in_planes)):
-        	self.loc_layers.append(nn.Conv2d(in_planes[i], num_anchors[i]*4, kernel_size=3, padding=1))
+            self.loc_layers.append(nn.Conv2d(in_planes[i], num_anchors[i]*4, kernel_size=3, padding=1))
             self.cls_layers.append(nn.Conv2d(in_planes[i], num_anchors[i]*(num_classes+1), kernel_size=3, padding=1))
             
     def forward(self, fms):
