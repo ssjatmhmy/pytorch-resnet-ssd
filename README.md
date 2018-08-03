@@ -1,4 +1,4 @@
-# ResNet-SSD in PyTorch
+# ResNet-SSD in PyTorch (unfinished)
 
 Reference:  
 [1][Single Shot MultiBox Detector](https://arxiv.org/abs/1512.02325)
